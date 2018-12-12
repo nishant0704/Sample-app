@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js">
+    <link href='https://fonts.googleapis.com/css?family=Allerta Stencil' rel='stylesheet'>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <style>
+      body{
+        background-image: url('https://wpblink.com/sites/default/files/wallpaper/abstract/65850/dark-wood-wallpapers-hd-65850-1782324.jpg');
+        text-align:center;
+        color:white;
+        font-family: Allerta Stencil;
+
+      }
+      /* .footer{
+        margin-top: 20px;
+        position:relative;
+        right:0;
+        bottom:0;
+      } */
+      table, th, td
+        {
+            border: solid 2px black;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            margin:auto;
+            border-radius: 15px;
+        }
+      th {
+          font-weight:bold;
+      }
+      div{
+        height:auto;
+      }
+      button{
+        margin-top:5px;
+        margin-bottom: 15px;
+      }
+      button:disabled{
+        cursor: not-allowed;
+      }
+      input{
+        border:1px solid black;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px 1px rgba(0,0,0,0.5);
+        margin-bottom: 10px;
+        color:white;
+
+      }
+      input::-webkit-input-placeholder {
+        text-align: center;
+      }
+      input[type="text"]{
+        background: transparent;
+        border-top:none;
+        outline:none;
+        border-left: none;
+        border-right: none;
+      }
+      ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: white;
+        opacity: 1; /* Firefox */
+      }
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Searchbar with flask</title>
+  </head>
+  <body>
+    <div>
+      <h1 class="w3-container w3-center w3-animate-left" style="margin-top: 20px;padding-bottom:30px">Welcome</h1>
+      <div class="w3-container w3-center w3-animate-left">
+        <form id="main" action="" method="get">
+          <input id="searchbox" type="text" name="q" value="" onkeyup="enableButtons()" placeholder="Enter Name to Search">
+        </form>
+        <button id="submitButton" type="submit" class="btn btn-info btn-sm mr-2" disabled >Submit</button>
+        <button id="resetButton" type="reset" class="btn btn-danger btn-sm ml-2" onclick="removeData()" disabled>Reset</button>
+      </div>
+      <div id="display">
+
+      </div>
+      <!-- <footer class="footer">
+        <p>&copy Nishant Rao 2018</p>
+      </footer> -->
+    </div>
+
+
+    <script type="text/javascript">
+      //Create event listener
+      document.getElementById("submitButton").addEventListener('click',makeRequest);
+      function makeRequest(){
+        var valueOfTextBox = document.getElementById("searchbox").value;
+        //Create xhr object
+        console.log('button clicked');
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET','http://localhost:5000/search?q='+valueOfTextBox.toString(),true);
+
+        xhr.onload = function(){
+          if(this.status == 200){
+            // console.log(this.responseText);
+            text = JSON.parse(this.responseText);
+            var col = [];
+              for (var i = 0; i < text.length; i++) {
+                  for (var key in text[i]) {
+                      if (col.indexOf(key) === -1) {
+                          col.push(key);
+                      }
+                  }
+              }
+                // for (var key in text) {
+                //     col.push(key);
+                // }
+
+            var tab = document.createElement("table");
+            // table.toString() === [object HTMLTableElement];
+            var tr = tab.insertRow(-1);
+            for(var i=0; i<col.length;i++){
+              var th = document.createElement("th");
+              th.innerHTML = col[i];
+              tr.appendChild(th);
+            }
+
+              for(var i=0;i<text.length;i++){
+                tr = tab.insertRow(-1);
+                for(var j=0;j<col.length;j++){
+                  var cell = tr.insertCell(-1);
+                  cell.innerHTML=text[i][col[j]];
+                }
+              }
+              console.log(text);
+
+            var result = document.getElementById("display");
+            result.innerHTML="";
+            result.appendChild(tab);
+            document.getElementById("display").append(tab);
+            // $('#display').append(tab);
+            console.log(tab);
+            } else if (this.status == 404){
+            document.getElementById("display").innerHTML = "User not found";
+          }
+        }
+        xhr.send();
+      }
+
+      function removeData(){
+        var empty = document.getElementById("searchbox");
+        empty.value = "";
+        document.getElementById("display").innerHTML="";
+        var btn1 = document.getElementById("submitButton");
+        var btn2 = document.getElementById("resetButton");
+        if(empty.value != ""){
+          btn1.disabled = false;
+          btn2.disabled = false;
+        } else{
+          btn1.disabled = true;
+          btn2.disabled = true;
+        }
+      }
+
+
+      function enableButtons(){
+        var m = document.getElementById("searchbox");
+        var n = document.getElementById("submitButton");
+        var o = document.getElementById("resetButton");
+        if (m.value != '') {
+          n.disabled = false;
+          o.disabled = false;
+        } else {
+          n.disabled  = true;
+          o.disabled = true;
+        }
+      }
+
+      // function enableResetButton() {
+      //   var x = document.getElementById("searchbox");
+      //   var y = document.getElementById("resetButton");
+      //   if(x.value != ''){
+      //     y.disabled = false;
+      //   } else {
+      //     y.disabled = true;
+      //   }
+      // }
+
+
+    </script>
+  </body>
+</html>
