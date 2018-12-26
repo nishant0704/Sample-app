@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Flask search</title>
+  </head>
+  <body>
+    <h1>Flask Searchbar</h1>
+    <form method="get" action="/search" style="margin-bottom:2px">
+      <input type="search" name="search" value="" placeholder="enter text">
+    </form>
+    <div>
+      {% block begin %}{% endblock %}
+    </div>
+  </body>
+</html>
