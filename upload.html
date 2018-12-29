@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Upload file</title>
+  </head>
+  <body>
+    <button type="button" name="button" onclick="upload()">Upload</button>
+    <a href="main.html"><button type="button" name="button">Back to Search</button></a>
+    <div id="view"></div>
+    <script type="text/javascript">
+      function upload(){
+        var dis = document.getElementById(view);
+        var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+
+               old = JSON.parse(this.responseText);
+               console.log(old['Name']);
+
+              }
+              dis.innerHTML = "New uploaded Name is"+" " + old['Name'] + " "+"from" +" " +old['Hometown']+" " + "," +" "+ old['Age']+" " + "Years old"+" "+"and is an"+" "+old['Job']+" "+"working in"+" "+old['Loc']+".";
+            };
+        xhttp.open("GET", "http://localhost:5001/", true);
+        xhttp.send();
+      }
+    </script>
+  </body>
+</html>

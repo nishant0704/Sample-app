@@ -1,9 +1,9 @@
-from flask import Flask,render_template,request,jsonify, Response
+from flask import Flask,render_template,jsonify, Response
 from flask_mysqldb import MySQL
-from citydata import cities_one,cities_two
 import yaml
 from json import dumps
 import re
+import requests
 
 
 
@@ -13,7 +13,7 @@ db=yaml.load(open('db.yaml'))
 app.config['MYSQL_HOST']= db['mysql_host']
 app.config['MYSQL_USER']= db['mysql_user']
 app.config['MYSQL_PASSWORD']= db['mysql_password']
-app.config['MYSQL_DB']= db['mysql_db','mysql_db1']
+app.config['MYSQL_DB']= db['mysql_db']
 mysql = MySQL(app)
 
 
@@ -22,32 +22,21 @@ def samplefunction():
     #access your DB get your results here
    r = requests.get(url ="http://localhost:5000/")
    data = r.json()
-   name = data['name']
-   age = data['age']
-   address = data['address']
-   print(data['name'])
+   Name = data['Name']
+   Age = data['Age']
+   Job = data['Job']
+   Hometown = data['Hometown']
+   Loc = data['Loc']
+   print(data['Name'])
     #if request.method == 'POST':
    cur = mysql.connection.cursor()
-   cur.execute("INSERT INTO person_data(name,age,address) VALUES(%s,%s,%s)",(name,age,address))
+   cur.execute("INSERT INTO person_information(Name,Age,Job,Hometown,Loc) VALUES(%s,%s,%s,%s,%s)",(Name,Age,Job,Hometown,Loc))
    mysql.connection.commit()
    cur.close()
    val= Response(dumps(data))
    val.headers['Access-Control-Allow-Origin'] = '*'
    return (val)
 
-@app.route('/upload')
-def inserting():
-    city_a = random.choice(cities_one)
-    city_b = random.choice(cities_two)
-    cur = mysql.connection.cursor()
-    cur.execute("INSERT INTO city(cityname,citynew) VALUES(%s,%s)",(city_a,city_b))
-    mysql.connection.commit()
-    cur.close()
-    cur.execute("SELECT * FROM city")
-    city_data = cur.fetchall()
-    if len(city_data) > 0:
-        value = Response(dumps(city_data))
-        return value
 
 
 @app.route('/search',methods=['GET'])
@@ -81,6 +70,19 @@ if __name__ == "__main__":
 
 
 
+    # @app.route('/upload')
+    # def inserting():
+    #     city_a = random.choice(cities_one)
+    #     city_b = random.choice(cities_two)
+    #     cur = mysql.connection.cursor()
+    #     cur.execute("INSERT INTO city(cityname,citynew) VALUES(%s,%s)",(city_a,city_b))
+    #     mysql.connection.commit()
+    #     cur.close()
+    #     cur.execute("SELECT * FROM city")
+    #     city_data = cur.fetchall()
+    #     if len(city_data) > 0:
+    #         value = Response(dumps(city_data))
+    #         return value
 
 
 # resp = requests.get('main.html')

@@ -10,8 +10,10 @@ app = Flask(__name__)
 @app.route('/')
 def datasearch():
   db = [
-            {'name': 'Sandeep', 'age': 27, 'address': 'mazha'},
-            {'name':'Nishanth','age':25, 'address':'blore'},
+            {'Name': 'Sam', 'Age': 27,'Job':'Engineer','Hometown':'bangalore', 'Loc': 'btm'},
+            {'Name':'ram','Age':25,'Job':'Engineer','Hometown':'bangalore', 'Loc':'blore'},
+            {'Name':'ramesh','Age':24,'Job':'Engineer','Hometown':'bangalore', 'Loc':'blore'},
+            {'Name':'suresh','Age':23,'Job':'Engineer','Hometown':'bangalore', 'Loc':'blore'},
         ]
 
   d = (random.choice(db))
